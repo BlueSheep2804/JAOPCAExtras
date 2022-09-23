@@ -24,11 +24,11 @@ public class PlatesModule implements IModule {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final JAOPCAApi api = JAOPCAApi.instance();
-    private final IForm plateForm = api.newForm(this, "additions_plates", api.itemFormType()).setMaterialTypes(MaterialType.NON_DUSTS);
+    private final IForm plateForm = api.newForm(this, "plates", api.itemFormType()).setMaterialTypes(MaterialType.NON_DUSTS);
 
     @Override
     public String getName() {
-        return "plates";
+        return "additions_plates";
     }
 
     @Override
