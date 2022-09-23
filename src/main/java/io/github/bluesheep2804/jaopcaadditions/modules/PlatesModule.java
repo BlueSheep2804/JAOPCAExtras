@@ -24,7 +24,7 @@ public class PlatesModule implements IModule {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final JAOPCAApi api = JAOPCAApi.instance();
-    private final IForm plateForm = api.newForm(this, "plates", api.itemFormType()).setMaterialTypes(MaterialType.NON_DUSTS);
+    private final IForm plateForm = api.newForm(this, "plates", api.itemFormType()).setMaterialTypes(MaterialType.INGOTS);
 
     @Override
     public String getName() {
