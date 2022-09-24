@@ -1,9 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "io.github.bluesheep2804.jaopcaadditions.mixin",
+  "package": "io.github.bluesheep2804.jaopcaextras.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "jaopcaadditions.refmap.json",
+  "refmap": "jaopcaextras.refmap.json",
   "mixins": [
   ],
   "client": [

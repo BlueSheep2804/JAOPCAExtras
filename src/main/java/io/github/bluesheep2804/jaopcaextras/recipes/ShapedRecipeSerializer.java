@@ -1,4 +1,4 @@
-package io.github.bluesheep2804.jaopcaadditions.recipes;
+package io.github.bluesheep2804.jaopcaextras.recipes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

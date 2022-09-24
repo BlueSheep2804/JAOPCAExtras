@@ -1,7 +1,7 @@
-package io.github.bluesheep2804.jaopcaadditions.modules;
+package io.github.bluesheep2804.jaopcaextras.modules;
 
 import com.mojang.logging.LogUtils;
-import io.github.bluesheep2804.jaopcaadditions.recipes.ShapedRecipeSerializer;
+import io.github.bluesheep2804.jaopcaextras.recipes.ShapedRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class RodsModule implements IModule {
 
     @Override
     public String getName() {
-        return "additions_rods";
+        return "extras_rods";
     }
 
     @Override
@@ -48,7 +48,7 @@ public class RodsModule implements IModule {
             ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), material.getName());
             IItemInfo rodInfo = api.itemFormType().getMaterialFormInfo(rodForm, material);
             api.registerRecipe(
-                    new ResourceLocation("jaopcaadditions", "rods.from_material." + material.getName()),
+                    new ResourceLocation("jaopcaextras", "rods.from_material." + material.getName()),
                     new ShapedRecipeSerializer(
                             new String[]{
                                     "M",
