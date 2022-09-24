@@ -19,7 +19,7 @@ group = 'io.github.bluesheep2804'
 version = '1.0.0'
 
 java {
-    archivesBaseName = 'jaopcaextras'
+    archivesBaseName = 'JAOPCAExtras-1.18.2'
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
@@ -194,7 +194,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "jaopcaextras",
+                "Specification-Title"     : "JAOPCAExtras",
                 "Specification-Vendor"    : "BlueSheep2804",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
