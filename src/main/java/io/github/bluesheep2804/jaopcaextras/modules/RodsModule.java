@@ -57,7 +57,7 @@ public class RodsModule implements IModule {
                             Map.of(
                                     "M", materialLocation
                             )
-                            ,rodInfo,1
+                            ,rodInfo,4
                     )
             );
         }
