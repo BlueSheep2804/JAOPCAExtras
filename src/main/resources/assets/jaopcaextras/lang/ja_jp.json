@@ -1,5 +1,7 @@
 {
   "item.jaopca.plates": "%sのプレート",
   "item.jaopca.rods": "%sの棒",
-  "item.jaopca.gears": "%sの歯車"
+  "item.jaopca.gears": "%sの歯車",
+  "item.jaopca.circuits": "%sの基盤",
+  "item.jaopca.processors": "%sプロセッサー"
 }
