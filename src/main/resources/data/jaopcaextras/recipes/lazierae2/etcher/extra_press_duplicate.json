@@ -1,0 +1,18 @@
+{
+  "type": "lazierae2:etcher",
+  "output": {
+    "item": "jaopcaextras:extra_press",
+    "count": 2
+  },
+  "input": [
+    {
+      "item": "jaopcaextras:extra_press"
+    },
+    {
+      "tag": "forge:ingots/iron",
+      "count": 6
+    }
+  ],
+  "process_time": 300,
+  "energy_cost": 8000
+}

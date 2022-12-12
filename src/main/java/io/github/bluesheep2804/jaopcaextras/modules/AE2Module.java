@@ -2,10 +2,12 @@ package io.github.bluesheep2804.jaopcaextras.modules;
 
 import com.mojang.logging.LogUtils;
 import io.github.bluesheep2804.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
+import io.github.bluesheep2804.jaopcaextras.recipes.LazierAE2EtcherRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
@@ -55,6 +57,10 @@ public class AE2Module implements IModule {
     public void onCommonSetup(IModuleData moduleData, FMLCommonSetupEvent event) {
         IMiscHelper miscHelper = api.miscHelper();
         Item press = EXTRA_PRESS.get();
+        Item universalPress = null;
+        if (ModList.get().isLoaded("lazierae2")) {
+            universalPress = ForgeRegistries.ITEMS.getValue(new ResourceLocation("lazierae2:universal_press"));
+        }
 
         for (IMaterial material : circuitForm.getMaterials()) {
             String name = material.getName();
@@ -62,7 +68,7 @@ public class AE2Module implements IModule {
                 ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), name);
                 IItemInfo circuitInfo = api.itemFormType().getMaterialFormInfo(circuitForm, material);
                 api.registerRecipe(
-                        new ResourceLocation("jaopcaextras", "inscriber.circuit" + material.getName()),
+                        new ResourceLocation("jaopcaextras", "inscriber.circuit." + material.getName()),
                         new AE2InscriberRecipeSerializer(
                                 "inscribe",
                                 materialLocation,
@@ -70,15 +76,28 @@ public class AE2Module implements IModule {
                                 circuitInfo
                         )
                 );
+                if (!(universalPress == null)) {
+                    api.registerRecipe(
+                            new ResourceLocation("jaopcaextras", "inscriber.circuit.universal." + material.getName()),
+                            new AE2InscriberRecipeSerializer(
+                                    "inscribe",
+                                    materialLocation,
+                                    universalPress,
+                                    circuitInfo
+                            )
+                    );
+                }
             }
         }
+
+        ResourceLocation silicon = new ResourceLocation("forge", "silicon");
+        ResourceLocation redstone = miscHelper.getTagLocation("dusts", "redstone");
 
         for (IMaterial material : processorForm.getMaterials()) {
             String name = material.getName();
             if (!BLACKLIST.contains(name)) {
                 ResourceLocation circuitLocation = miscHelper.getTagLocation("circuits", material.getName());
                 IItemInfo processorInfo = api.itemFormType().getMaterialFormInfo(processorForm, material);
-                Item redstone = Items.REDSTONE;
                 api.registerRecipe(
                         new ResourceLocation("jaopcaextras", "inscriber.processor." + material.getName()),
                         new AE2InscriberRecipeSerializer(
@@ -88,6 +107,22 @@ public class AE2Module implements IModule {
                                 processorInfo
                         )
                 );
+                if (!(universalPress == null)) {
+                    ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), name);
+                    LOGGER.info(processorInfo.toString());
+                    api.registerRecipe(
+                            new ResourceLocation("jaopcaextras", "etcher.processor." + material.getName()),
+                            new LazierAE2EtcherRecipeSerializer(
+                                    new ResourceLocation[]{
+                                            materialLocation,
+                                            redstone,
+                                            silicon
+                                    },
+                                    processorInfo
+                            )
+                    );
+                }
+
             }
         }
     }

@@ -1,0 +1,19 @@
+{
+  "type": "lazierae2:etcher",
+  "output": {
+    "item": "jaopcaextras:extra_press"
+  },
+  "input": [
+    {
+      "item": "ae2:fluix_pearl"
+    },
+    {
+      "tag": "forge:storage_blocks/iron"
+    },
+    {
+      "item": "ae2:printed_silicon"
+    }
+  ],
+  "process_time": 300,
+  "energy_cost": 8000
+}
