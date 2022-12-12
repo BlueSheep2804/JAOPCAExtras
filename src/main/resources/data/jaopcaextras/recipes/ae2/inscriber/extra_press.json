@@ -1,0 +1,18 @@
+{
+  "type": "ae2:inscriber",
+  "mode": "press",
+  "result": {
+    "item": "jaopcaextras:extra_press"
+  },
+  "ingredients": {
+    "middle": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "top": {
+      "item": "ae2:fluix_pearl"
+    },
+    "bottom": {
+      "item": "ae2:printed_silicon"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "ae2:inscriber",
+  "mode": "inscribe",
+  "result": {
+    "item": "jaopcaextras:extra_press"
+  },
+  "ingredients": {
+    "middle": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "top": {
+      "item": "jaopcaextras:extra_press"
+    }
+  }
+}

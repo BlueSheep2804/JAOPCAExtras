@@ -4,8 +4,8 @@ import com.mojang.logging.LogUtils;
 import io.github.bluesheep2804.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
@@ -19,6 +19,8 @@ import thelm.jaopca.api.modules.IModuleData;
 import thelm.jaopca.api.modules.JAOPCAModule;
 
 import java.util.*;
+
+import static io.github.bluesheep2804.jaopcaextras.init.ItemInit.EXTRA_PRESS;
 
 @JAOPCAModule(modDependencies = "ae2")
 public class AE2Module implements IModule {
@@ -52,7 +54,7 @@ public class AE2Module implements IModule {
     @Override
     public void onCommonSetup(IModuleData moduleData, FMLCommonSetupEvent event) {
         IMiscHelper miscHelper = api.miscHelper();
-        Item press = ForgeRegistries.ITEMS.getValue(new ResourceLocation("ae2:engineering_processor_press"));
+        Item press = EXTRA_PRESS.get();
 
         for (IMaterial material : circuitForm.getMaterials()) {
             String name = material.getName();
@@ -76,7 +78,7 @@ public class AE2Module implements IModule {
             if (!BLACKLIST.contains(name)) {
                 ResourceLocation circuitLocation = miscHelper.getTagLocation("circuits", material.getName());
                 IItemInfo processorInfo = api.itemFormType().getMaterialFormInfo(processorForm, material);
-                Item redstone = ForgeRegistries.ITEMS.getValue(new ResourceLocation("minecraft:redstone"));
+                Item redstone = Items.REDSTONE;
                 api.registerRecipe(
                         new ResourceLocation("jaopcaextras", "inscriber.processor." + material.getName()),
                         new AE2InscriberRecipeSerializer(
