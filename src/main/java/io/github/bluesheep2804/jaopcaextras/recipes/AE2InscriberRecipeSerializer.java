@@ -5,15 +5,11 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.helpers.IMiscHelper;
 import thelm.jaopca.api.recipes.IRecipeSerializer;
 
 public class AE2InscriberRecipeSerializer implements IRecipeSerializer {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public final String mode;
     public final Object inputMiddle;
     public final Object inputTop;
@@ -45,7 +41,6 @@ public class AE2InscriberRecipeSerializer implements IRecipeSerializer {
 
         json.add("result", miscHelper.getIngredient(this.result).toJson());
 
-        LOGGER.info(json);
         return json;
     }
 }

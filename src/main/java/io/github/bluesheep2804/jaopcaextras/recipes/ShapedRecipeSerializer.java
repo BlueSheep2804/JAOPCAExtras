@@ -5,8 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.helpers.IMiscHelper;
 import thelm.jaopca.api.recipes.IRecipeSerializer;
@@ -14,8 +12,6 @@ import thelm.jaopca.api.recipes.IRecipeSerializer;
 import java.util.Map;
 
 public class ShapedRecipeSerializer implements IRecipeSerializer {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public final String[] pattern;
     public final Map<String, ResourceLocation> key;
     public final Object output;
@@ -50,7 +46,6 @@ public class ShapedRecipeSerializer implements IRecipeSerializer {
         ItemStack stack = miscHelper.getItemStack(this.output, this.count);
         json.add("result", miscHelper.serializeItemStack(stack));
 
-        LOGGER.info(json);
         return json;
     }
 }

@@ -1,6 +1,5 @@
 package io.github.bluesheep2804.jaopcaextras.modules;
 
-import com.mojang.logging.LogUtils;
 import io.github.bluesheep2804.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
 import io.github.bluesheep2804.jaopcaextras.recipes.LazierAE2EtcherRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
@@ -8,7 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.slf4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
 import thelm.jaopca.api.forms.IFormRequest;
@@ -26,9 +24,6 @@ import static io.github.bluesheep2804.jaopcaextras.init.ItemInit.EXTRA_PRESS;
 
 @JAOPCAModule(modDependencies = "ae2")
 public class AE2Module implements IModule {
-
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     private final JAOPCAApi api = JAOPCAApi.instance();
     private static final Set<String> BLACKLIST = new TreeSet<>(Arrays.asList(
             "brick", "nether_brick",
@@ -109,7 +104,6 @@ public class AE2Module implements IModule {
                 );
                 if (!(universalPress == null)) {
                     ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), name);
-                    LOGGER.info(processorInfo.toString());
                     api.registerRecipe(
                             new ResourceLocation("jaopcaextras", "etcher.processor." + material.getName()),
                             new LazierAE2EtcherRecipeSerializer(

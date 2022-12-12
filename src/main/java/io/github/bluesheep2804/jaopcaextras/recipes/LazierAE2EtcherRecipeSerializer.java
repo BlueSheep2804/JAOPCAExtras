@@ -4,15 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.helpers.IMiscHelper;
 import thelm.jaopca.api.recipes.IRecipeSerializer;
 
 public class LazierAE2EtcherRecipeSerializer implements IRecipeSerializer {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public final ResourceLocation[] input;
     public final Object output;
     public final int processTime;
@@ -49,7 +45,6 @@ public class LazierAE2EtcherRecipeSerializer implements IRecipeSerializer {
 
         json.add("output", miscHelper.getIngredient(this.output).toJson());
 
-        LOGGER.info(json);
         return json;
     }
 }
