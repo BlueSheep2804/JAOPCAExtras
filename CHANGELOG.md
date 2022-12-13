@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.1.0...v1.1.1) (2022-12-13)
+
+
+### Bug Fixes
+
+* 🐛 versioning ([d7a345b](https://github.com/BlueSheep2804/JAOPCAExtras/commit/d7a345b41d03a3fb67425e58335d9455c51129e2))
+
 ## [1.1.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/1.0.1...v1.1.0) (2022-12-13)
 
 
