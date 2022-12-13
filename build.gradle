@@ -178,19 +178,19 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:jaopca-266936:3968034")
+    implementation fg.deobf("curse.maven:jaopca-266936:4143362")
 
-    runtimeOnly fg.deobf("curse.maven:cofh-69162:3838025")
-    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:3837827")
-    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:3837868")
-
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.281:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.281")
-
-    runtimeOnly fg.deobf("mekanism:Mekanism:1.18.2-10.2.5.465")
+    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.259:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.259")
 
     implementation fg.deobf("appeng:appliedenergistics2-forge:11.7.0")
     runtimeOnly fg.deobf("curse.maven:lazierae2-489843:4145521")
+
+    // for debug
+    runtimeOnly fg.deobf("curse.maven:cofh-69162:4112120")
+    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:4102233")
+    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:4101926")
+    runtimeOnly fg.deobf("mekanism:Mekanism:1.18.2-10.2.5.465")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

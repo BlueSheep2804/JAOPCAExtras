@@ -56,3 +56,31 @@ mandatory = true
 versionRange = "[1.18.2,1.19)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.jaopcaextras]]
+modId = "jaopca"
+mandatory = true
+versionRange = "[4.1.12.21,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.jaopcaextras]]
+modId = "jei"
+mandatory = false
+versionRange = "[9.7.2.259,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.jaopcaextras]]
+modId = "ae2"
+mandatory = false
+versionRange = "[11.7.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.jaopcaextras]]
+modId = "lazierae2"
+mandatory = false
+versionRange = "[3.1.5,)"
+ordering = "AFTER"
+side = "BOTH"
