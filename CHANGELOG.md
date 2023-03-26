@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.2.0...v2.0.0) (2023-03-26)
+
+
+### Features
+
+* 🎸 support for 1.19.2 ([109d7d9](https://github.com/BlueSheep2804/JAOPCAExtras/commit/109d7d9b1de2ed373b915c4ee2435e3ceb82c833))
+
 ## [1.2.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.1.1...v1.2.0) (2023-03-26)
 
 
