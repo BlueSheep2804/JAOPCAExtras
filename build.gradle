@@ -16,10 +16,10 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'io.github.bluesheep2804'
-version = '1.2.0'
+version = '2.0.0'
 
 java {
-    archivesBaseName = 'JAOPCAExtras-1.18.2'
+    archivesBaseName = 'JAOPCAExtras-1.19.2'
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
@@ -37,7 +37,7 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -162,7 +162,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.2.1'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.0'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -178,19 +178,20 @@ dependencies {
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    implementation fg.deobf("curse.maven:jaopca-266936:4434228")
+    implementation fg.deobf("curse.maven:jaopca-266936:4434235")
 
-    compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.259:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.2.259")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-common-api:11.6.0.1013")
+    compileOnly fg.deobf("mezz.jei:jei-1.19.2-forge-api:11.6.0.1013")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.19.2-forge:11.6.0.1013")
 
-    implementation fg.deobf("appeng:appliedenergistics2-forge:11.7.0")
-    runtimeOnly fg.deobf("curse.maven:lazierae2-489843:4145521")
+    implementation fg.deobf("appeng:appliedenergistics2-forge:12.9.2")
+    // runtimeOnly fg.deobf("curse.maven:lazierae2-489843:4145521")
 
     // for debug
-    runtimeOnly fg.deobf("curse.maven:cofh-69162:4112120")
-    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:4102233")
-    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:4101926")
-    runtimeOnly fg.deobf("mekanism:Mekanism:1.18.2-10.2.5.465")
+    runtimeOnly fg.deobf("curse.maven:cofh-69162:4385216")
+    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:4382373")
+    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:4382371")
+    runtimeOnly fg.deobf("mekanism:Mekanism:1.19.2-10.3.8.477")
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
