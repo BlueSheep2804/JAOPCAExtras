@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.1.1...v1.2.0) (2023-03-26)
+
+
+### Features
+
+* 🎸 Redraw item icons for each module ([4d1a304](https://github.com/BlueSheep2804/JAOPCAExtras/commit/4d1a3043a53b12c6a1460ce52d7ca3b9a932ff89))
+
 ## [1.1.1](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.1.0...v1.1.1) (2022-12-13)
 
 
