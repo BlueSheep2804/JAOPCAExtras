@@ -73,6 +73,12 @@ repositories {
             includeGroup "appeng"
         }
     }
+    maven {
+        url "https://maven.tterrag.com/"
+        content {
+            includeGroup "com.simibubi.create"
+        }
+    }
 }
 
 dependencies {
@@ -91,6 +97,10 @@ dependencies {
 //    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:4382373")
 //    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:4382371")
 //    runtimeOnly fg.deobf("mekanism:Mekanism:1.19.2-10.3.8.477")
+    runtimeOnly fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.d-9:all") {
+        transitive = false
+    }
+    runtimeOnly fg.deobf("curse.maven:ato-405593:4590570")
 }
 
 jar {
