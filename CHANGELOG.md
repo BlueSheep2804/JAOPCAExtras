@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.0.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v2.0.0...v3.0.0) (2023-09-13)
+
+
+### Features
+
+* 🎸 Add creative tab ([8217a63](https://github.com/BlueSheep2804/JAOPCAExtras/commit/8217a638c1481d20ab473bfab2b39c055d1b6b79))
+* 🎸 Bump up pack.mcmeta version ([6ded744](https://github.com/BlueSheep2804/JAOPCAExtras/commit/6ded744f5f0f7e1d5eee7abcd526651c262a3f41))
+* 🎸 port to 1.20.1 ([f793c75](https://github.com/BlueSheep2804/JAOPCAExtras/commit/f793c75effd52061900a140a984a4184c1c743b8))
+
+
+### Miscellaneous Chores
+
+* release 3.0.0 ([ced184a](https://github.com/BlueSheep2804/JAOPCAExtras/commit/ced184a8dec21c71f5594eac4413bb5256e862f4))
+
 ## [2.0.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v1.2.0...v2.0.0) (2023-03-26)
 
 
