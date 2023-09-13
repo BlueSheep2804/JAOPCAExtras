@@ -10,7 +10,7 @@ import net.minecraftforge.fml.ModList;
 
 import java.util.Collections;
 
-import static io.github.bluesheep2804.jaopcaextras.init.ItemInit.EXTRA_PRESS;
+import static io.github.bluesheep2804.jaopcaextras.registries.JaopcaextrasItems.EXTRA_PRESS;
 
 @JeiPlugin
 public class JaopcaExtrasJeiPlugin implements IModPlugin {

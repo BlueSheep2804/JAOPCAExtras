@@ -20,7 +20,7 @@ import thelm.jaopca.api.modules.JAOPCAModule;
 
 import java.util.*;
 
-import static io.github.bluesheep2804.jaopcaextras.init.ItemInit.EXTRA_PRESS;
+import static io.github.bluesheep2804.jaopcaextras.registries.JaopcaextrasItems.EXTRA_PRESS;
 
 @JAOPCAModule(modDependencies = "ae2")
 public class AE2Module implements IModule {

@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.stream.Stream;
 
-import static io.github.bluesheep2804.jaopcaextras.init.ItemInit.EXTRA_PRESS;
+import static io.github.bluesheep2804.jaopcaextras.registries.JaopcaextrasItems.EXTRA_PRESS;
 
 public class JaopcaextrasCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Jaopcaextras.MOD_ID);
