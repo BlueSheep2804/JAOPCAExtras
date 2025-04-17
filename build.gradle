@@ -75,12 +75,11 @@ dependencies {
 
     implementation "curse.maven:jaopca-266936:5842919"
 
-    implementation "mezz.jei:jei-1.21.1-neoforge:19.21.0.247"
-
     implementation "org.appliedenergistics:appliedenergistics2:19.2.4"
     // runtimeOnly fg.deobf("curse.maven:lazierae2-489843:4145521")
 
     // for debug
+    runtimeOnly "mezz.jei:jei-1.21.1-neoforge:19.21.0.247"
 //    runtimeOnly fg.deobf("curse.maven:cofh-69162:4385216")
 //    runtimeOnly fg.deobf("curse.maven:thermalfoundation-222880:4382373")
 //    runtimeOnly fg.deobf("curse.maven:thermalexpansion-69163:4382371")
