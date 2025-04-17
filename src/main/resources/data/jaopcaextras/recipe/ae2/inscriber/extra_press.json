@@ -2,11 +2,12 @@
   "type": "ae2:inscriber",
   "mode": "press",
   "result": {
-    "item": "jaopcaextras:extra_press"
+    "id": "jaopcaextras:extra_press",
+    "count": 1
   },
   "ingredients": {
     "middle": {
-      "tag": "forge:storage_blocks/iron"
+      "item": "minecraft:iron_block"
     },
     "top": {
       "item": "ae2:fluix_pearl"

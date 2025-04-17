@@ -1,8 +1,7 @@
 package io.github.bluesheep2804.jaopcaextras.modules;
 
-import io.github.bluesheep2804.jaopcaextras.recipes.ShapedRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
 import thelm.jaopca.api.forms.IFormRequest;
@@ -13,6 +12,7 @@ import thelm.jaopca.api.materials.MaterialType;
 import thelm.jaopca.api.modules.IModule;
 import thelm.jaopca.api.modules.IModuleData;
 import thelm.jaopca.api.modules.JAOPCAModule;
+import thelm.jaopca.recipes.ShapedRecipeSerializer;
 
 import java.util.*;
 
@@ -42,17 +42,18 @@ public class RodsModule implements IModule {
         for (IMaterial material : rodForm.getMaterials()) {
             ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), material.getName());
             IItemInfo rodInfo = api.itemFormType().getMaterialFormInfo(rodForm, material);
+
             api.registerRecipe(
-                    new ResourceLocation("jaopcaextras", "rods.from_material." + material.getName()),
+                    ResourceLocation.fromNamespaceAndPath("jaopcaextras", "rods.from_material." + material.getName()),
                     new ShapedRecipeSerializer(
-                            new String[]{
+                            ResourceLocation.fromNamespaceAndPath("jaopcaextras", "rods.from_material." + material.getName()),
+                            rodInfo,
+                            2,
+                            new String[] {
                                     "M",
                                     "M"
                             },
-                            Map.of(
-                                    "M", materialLocation
-                            )
-                            ,rodInfo,4
+                            'M', materialLocation
                     )
             );
         }

@@ -1,8 +1,8 @@
 package io.github.bluesheep2804.jaopcaextras.modules;
 
-import io.github.bluesheep2804.jaopcaextras.recipes.ShapedRecipeSerializer;
+import thelm.jaopca.recipes.ShapedRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
 import thelm.jaopca.api.forms.IFormRequest;
@@ -42,17 +42,18 @@ public class PlatesModule implements IModule {
         for (IMaterial material : plateForm.getMaterials()) {
             ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), material.getName());
             IItemInfo plateInfo = api.itemFormType().getMaterialFormInfo(plateForm, material);
+
             api.registerRecipe(
-                    new ResourceLocation("jaopcaextras", "plates.from_material." + material.getName()),
+                    ResourceLocation.fromNamespaceAndPath("jaopcaextras", "plates.from_material." + material.getName()),
                     new ShapedRecipeSerializer(
-                            new String[]{
+                            ResourceLocation.fromNamespaceAndPath("jaopcaextras", "plates.from_material." + material.getName()),
+                            plateInfo,
+                            1,
+                            new String[] {
                                     "M ",
                                     " M"
                             },
-                            Map.of(
-                                    "M", materialLocation
-                            )
-                            ,plateInfo,1
+                            'M', materialLocation
                     )
             );
         }

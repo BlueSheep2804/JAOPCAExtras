@@ -1,12 +1,12 @@
 package io.github.bluesheep2804.jaopcaextras.modules;
 
+import appeng.recipes.handlers.InscriberProcessType;
 import io.github.bluesheep2804.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
-import io.github.bluesheep2804.jaopcaextras.recipes.LazierAE2EtcherRecipeSerializer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
 import thelm.jaopca.api.forms.IFormRequest;
@@ -20,7 +20,7 @@ import thelm.jaopca.api.modules.JAOPCAModule;
 
 import java.util.*;
 
-import static io.github.bluesheep2804.jaopcaextras.registries.JaopcaextrasItems.EXTRA_PRESS;
+import static io.github.bluesheep2804.jaopcaextras.registries.JAOPCAExtrasItems.EXTRA_PRESS;
 
 @JAOPCAModule(modDependencies = "ae2")
 public class AE2Module implements IModule {
@@ -52,10 +52,6 @@ public class AE2Module implements IModule {
     public void onCommonSetup(IModuleData moduleData, FMLCommonSetupEvent event) {
         IMiscHelper miscHelper = api.miscHelper();
         Item press = EXTRA_PRESS.get();
-        Item universalPress = null;
-        if (ModList.get().isLoaded("lazierae2")) {
-            universalPress = ForgeRegistries.ITEMS.getValue(new ResourceLocation("lazierae2:universal_press"));
-        }
 
         for (IMaterial material : circuitForm.getMaterials()) {
             String name = material.getName();
@@ -63,30 +59,20 @@ public class AE2Module implements IModule {
                 ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), name);
                 IItemInfo circuitInfo = api.itemFormType().getMaterialFormInfo(circuitForm, material);
                 api.registerRecipe(
-                        new ResourceLocation("jaopcaextras", "inscriber.circuit." + material.getName()),
+                        ResourceLocation.fromNamespaceAndPath("jaopcaextras", "inscriber.circuit." + material.getName()),
                         new AE2InscriberRecipeSerializer(
-                                "inscribe",
+                                InscriberProcessType.INSCRIBE,
                                 materialLocation,
                                 press,
+                                Ingredient.EMPTY,
                                 circuitInfo
                         )
                 );
-                if (!(universalPress == null)) {
-                    api.registerRecipe(
-                            new ResourceLocation("jaopcaextras", "inscriber.circuit.universal." + material.getName()),
-                            new AE2InscriberRecipeSerializer(
-                                    "inscribe",
-                                    materialLocation,
-                                    universalPress,
-                                    circuitInfo
-                            )
-                    );
-                }
             }
         }
 
-        ResourceLocation silicon = new ResourceLocation("forge", "silicon");
         ResourceLocation redstone = miscHelper.getTagLocation("dusts", "redstone");
+        Item printedSilicon = BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("ae2", "printed_silicon"));
 
         for (IMaterial material : processorForm.getMaterials()) {
             String name = material.getName();
@@ -94,29 +80,15 @@ public class AE2Module implements IModule {
                 ResourceLocation circuitLocation = miscHelper.getTagLocation("circuits", material.getName());
                 IItemInfo processorInfo = api.itemFormType().getMaterialFormInfo(processorForm, material);
                 api.registerRecipe(
-                        new ResourceLocation("jaopcaextras", "inscriber.processor." + material.getName()),
+                        ResourceLocation.fromNamespaceAndPath("jaopcaextras", "inscriber.processor." + material.getName()),
                         new AE2InscriberRecipeSerializer(
-                                "press",
+                                InscriberProcessType.PRESS,
                                 redstone,
                                 circuitLocation,
+                                printedSilicon,
                                 processorInfo
                         )
                 );
-                if (!(universalPress == null)) {
-                    ResourceLocation materialLocation = miscHelper.getTagLocation(material.getType().getFormName(), name);
-                    api.registerRecipe(
-                            new ResourceLocation("jaopcaextras", "etcher.processor." + material.getName()),
-                            new LazierAE2EtcherRecipeSerializer(
-                                    new ResourceLocation[]{
-                                            materialLocation,
-                                            redstone,
-                                            silicon
-                                    },
-                                    processorInfo
-                            )
-                    );
-                }
-
             }
         }
     }
