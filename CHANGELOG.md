@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.0.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v3.0.0...v4.0.0) (2025-04-18)
+
+
+### Features
+
+* 🎸 port to 1.21.1 and neoforge ([85cde72](https://github.com/BlueSheep2804/JAOPCAExtras/commit/85cde72cb746e75bbbc6be1cc0e43d90c100b6f6))
+* 🎸 Update strings ([9a7db7a](https://github.com/BlueSheep2804/JAOPCAExtras/commit/9a7db7a9bfa193087b008cb57a3fda594f9c9c0c))
+* 🎸 Update textures ([dbaf415](https://github.com/BlueSheep2804/JAOPCAExtras/commit/dbaf415a10d61b14f5e3d340769c11d400ad627e))
+
+
+### Bug Fixes
+
+* 🐛 Remove JEI from dependencies ([b10c6df](https://github.com/BlueSheep2804/JAOPCAExtras/commit/b10c6dffd590ba8a5a409119a5064134e811586a))
+
+
+### Miscellaneous Chores
+
+* release 4.0.0 ([44abcd1](https://github.com/BlueSheep2804/JAOPCAExtras/commit/44abcd1b5e84c19fac121008837a3300f7652cc2))
+
 ## [3.0.0](https://github.com/BlueSheep2804/JAOPCAExtras/compare/v2.0.0...v3.0.0) (2023-09-13)
 
 
