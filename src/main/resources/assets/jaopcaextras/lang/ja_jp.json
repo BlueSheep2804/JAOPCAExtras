@@ -2,6 +2,9 @@
   "item.jaopca.plates": "%sのプレート",
   "item.jaopca.rods": "%sの棒",
   "item.jaopca.gears": "%sの歯車",
-  "item.jaopca.circuits": "%sの基盤",
-  "item.jaopca.processors": "%sプロセッサー"
+  "item.jaopca.circuits": "%s回路",
+  "item.jaopca.processors": "%sプロセッサ",
+
+  "item.jaopcaextras.extra_press": "追加回路の金型",
+  "itemGroup.jaopcaextras": "JAOPCA Extras"
 }
