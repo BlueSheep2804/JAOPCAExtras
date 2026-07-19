@@ -128,6 +128,13 @@ configurations.runtimeClasspath {
 
 repositories {
     maven {
+        name = "CurseMaven"
+        url = uri("https://cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+    maven {
         name = "Modrinth"
         url = uri("https://api.modrinth.com/maven")
         content {
@@ -137,6 +144,11 @@ repositories {
 }
 
 dependencies {
+    implementation("curse.maven:jaopca-266936:5842919")
+
+    runtimeOnly("curse.maven:immersive-engineering-231951:6733669")
+    runtimeOnly("curse.maven:mekanism-268560:7904058")
+    runtimeOnly("maven.modrinth:jei:UJRXzDfp")
 }
 
 var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
