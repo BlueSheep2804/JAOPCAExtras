@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      snapshot_version:
+        description: 'Is snapshot version?'
+        type: boolean
+      version_override:
+        description: 'Version override'
+        type: string
+      release_type_override:
+        description: 'ReleaseType override'
+        type: choice
+        options:
+          - STABLE
+          - BETA
+          - ALPHA
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew -Pis_snapshot=$SNAPSHOT -Pversion_override=$VERSION_OVERRIDE -Prelease_type_override=$RELEASE_TYPE_OVERRIDE build
+        env:
+          SNAPSHOT: ${{ inputs.snapshot_version }}
+          VERSION_OVERRIDE: ${{ inputs.version_override }}
+          RELEASE_TYPE_OVERRIDE: ${{ inputs.release_type_override }}
+
+      - name: Capture build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: builds
+          path: build/libs/
