@@ -1,4 +1,4 @@
-modLoader="kotlinforforge"
+modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/"
@@ -25,7 +25,7 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
-    versionRange="${neoforge_version_range}"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 

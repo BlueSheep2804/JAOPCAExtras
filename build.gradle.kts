@@ -8,29 +8,23 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
-tasks.named<Wrapper>("wrapper").configure {
-    distributionType = Wrapper.DistributionType.BIN
-}
-
 @Suppress("ConstPropertyName")
 object ModInfo {
-    const val minecraft_version = "1.21.1"
-    const val minecraft_version_range = "[1.21.1,)"
-    const val neoforge_version = "21.1.235"
-    const val neoforge_version_range = "[21.1,)"
-    const val loader_version_range = "[5.9,)"
-    const val parchment_minecraft_version = minecraft_version
-    const val parchment_mappings_version = "2024.11.17"
-
-    const val mod_id = "examplemod"
-    const val mod_name = "Example Mod"
-    const val mod_license = "All Rights Reserved"
+    const val mod_id = "jaopcaextras"
+    const val mod_name = "JAOPCA Extras"
+    const val mod_license = "MIT"
     const val mod_version = "1.0.0"
-    const val mod_group_id = "dev.bluesheep.examplemod"
+    const val mod_group_id = "dev.bluesheep.jaopcaextras"
 
     const val curseforge_project_id = ""
     const val modrinth_project_id = ""
 }
+
+val minecraftVersion = sc.current.version
+val forgeVersion = property("forge_version") as String
+val platform = if (sc.current.parsed >= "1.21") {
+    "neoforge"
+} else "forge"
 
 fun getProperty(name: String): String? {
     return if (project.hasProperty(name)) {
@@ -50,7 +44,7 @@ version = modVersion
 group = ModInfo.mod_group_id
 
 base {
-    archivesName = ModInfo.mod_id
+    archivesName = "${ModInfo.mod_id}-$minecraftVersion"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -64,11 +58,11 @@ tasks.withType<JavaExec>().configureEach {
 }
 
 neoForge {
-    version = ModInfo.neoforge_version
+    version = forgeVersion
 
     parchment {
-        mappingsVersion = ModInfo.parchment_mappings_version
-        minecraftVersion = ModInfo.parchment_minecraft_version
+        mappingsVersion = property("parchment_mappings_version") as String
+        minecraftVersion = property("parchment_minecraft_version") as String
     }
 
     // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
@@ -127,20 +121,12 @@ neoForge {
     }
 }
 
-
 val localRuntime by configurations.creating
 configurations.runtimeClasspath {
     extendsFrom(localRuntime)
 }
 
 repositories {
-    maven {
-        name = "Kotlin for Forge"
-        url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-        content {
-            includeGroup("thedarkcolour")
-        }
-    }
     maven {
         name = "Modrinth"
         url = uri("https://api.modrinth.com/maven")
@@ -151,26 +137,22 @@ repositories {
 }
 
 dependencies {
-    implementation("thedarkcolour:kotlinforforge-neoforge:5.9.0")
-
-    runtimeOnly("maven.modrinth:ferrite-core:x7kQWVju")
-    runtimeOnly("maven.modrinth:jei:UJRXzDfp")
 }
 
 var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
     var replaceProperties = mapOf(
-        "minecraft_version" to ModInfo.minecraft_version,
-        "minecraft_version_range" to ModInfo.minecraft_version_range,
-        "neoforge_version" to ModInfo.neoforge_version,
-        "neoforge_version_range" to ModInfo.neoforge_version_range,
-        "loader_version_range" to ModInfo.loader_version_range,
+        "minecraft_version" to minecraftVersion,
+        "minecraft_version_range" to project.property("minecraft_version_range"),
+        "forge_version" to forgeVersion,
+        "forge_version_range" to project.property("forge_version_range"),
+        "loader_version_range" to project.property("loader_version_range"),
         "mod_id" to ModInfo.mod_id,
         "mod_name" to ModInfo.mod_name,
         "mod_license" to ModInfo.mod_license,
         "mod_version" to modVersion,
     )
     expand(replaceProperties)
-    from("src/main/templates")
+    from("../../src/main/templates")
     into("build/generated/sources/modMetadata")
 }
 sourceSets["main"].resources.srcDir(generateModMetadata)
@@ -206,14 +188,14 @@ fun parsePublishType(name: String): ReleaseType {
 publishMods {
     displayName = "${ModInfo.mod_name} $modVersion"
     file = tasks.jar.get().archiveFile
-    changelog = file("changelog.md").readText()
+    changelog = file("../../changelog.md").readText()
     type = parsePublishType(releaseTypeOverride ?: "STABLE")
-    modLoaders.add("neoforge")
+    modLoaders.add(platform)
 
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY").getOrElse("")
         projectId = ModInfo.curseforge_project_id
-        minecraftVersions.add(ModInfo.minecraft_version)
+        minecraftVersions.add(minecraftVersion)
         client = true
         server = true
     }
@@ -221,6 +203,6 @@ publishMods {
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN").getOrElse("")
         projectId = ModInfo.modrinth_project_id
-        minecraftVersions.add(ModInfo.minecraft_version)
+        minecraftVersions.add(minecraftVersion)
     }
 }
