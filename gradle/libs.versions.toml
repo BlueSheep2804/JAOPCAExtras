@@ -4,4 +4,5 @@ modpublishplugin-version = "2.1.1"
 
 [plugins]
 moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle-version" }
+moddevgradlelegacy = { id = "net.neoforged.moddev.legacyforge", version.ref = "moddevgradle-version" }
 modpublishplugin = { id = "me.modmuss50.mod-publish-plugin", version.ref = "modpublishplugin-version" }

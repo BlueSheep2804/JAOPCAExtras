@@ -1,0 +1,6 @@
+{
+  "pack": {
+    "description": "JAOPCAExtras Resource",
+    "pack_format": ${minecraft_resource_format}
+  }
+}

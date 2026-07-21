@@ -1,11 +1,21 @@
 import me.modmuss50.mpp.ReleaseType
+import net.neoforged.moddevgradle.dsl.NeoForgeExtension
+import net.neoforged.moddevgradle.legacyforge.dsl.LegacyForgeExtension
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
 plugins {
     id("java-library")
     id("idea")
-    alias(libs.plugins.moddevgradle)
+    alias(libs.plugins.moddevgradle) apply false
+    alias(libs.plugins.moddevgradlelegacy) apply false
     alias(libs.plugins.modpublishplugin)
     kotlin("jvm") version "2.0.0"
+}
+
+stonecutter {
+    replacements.string(current.parsed >= "1.21") {
+        replace("net.minecraftforge", "net.neoforged")
+    }
 }
 
 @Suppress("ConstPropertyName")
@@ -20,11 +30,16 @@ object ModInfo {
     const val modrinth_project_id = ""
 }
 
-val minecraftVersion = sc.current.version
-val forgeVersion = property("forge_version") as String
+val mcVersion = sc.current.version
+val forgeLoaderVersion = property("forge_version") as String
 val platform = if (sc.current.parsed >= "1.21") {
     "neoforge"
 } else "forge"
+val isForge = platform == "forge"
+val projectJavaVersion = when {
+    sc.current.parsed >= "1.20.5" -> 21
+    else -> 17
+}
 
 fun getProperty(name: String): String? {
     return if (project.hasProperty(name)) {
@@ -44,86 +59,161 @@ version = modVersion
 group = ModInfo.mod_group_id
 
 base {
-    archivesName = "${ModInfo.mod_id}-$minecraftVersion"
+    archivesName = "${ModInfo.mod_id}-$mcVersion"
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-kotlin.jvmToolchain(21)
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+    vendor.set(JvmVendorSpec.JETBRAINS)
+}
 
-tasks.withType<JavaExec>().configureEach {
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
         vendor.set(JvmVendorSpec.JETBRAINS)
     }
 }
 
-neoForge {
-    version = forgeVersion
-
-    parchment {
-        mappingsVersion = property("parchment_mappings_version") as String
-        minecraftVersion = property("parchment_minecraft_version") as String
-    }
-
-    // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
-
-    runs {
-        register("client") {
-            client()
-
-            systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
-        }
-
-        register("client2") {
-            client()
-
-            gameDirectory = project.file("run2")
-            programArguments.addAll("--username", "Dev2")
-
-            systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
-        }
-
-        register("server") {
-            server()
-            programArgument("--nogui")
-            systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
-        }
-
-        register("gameTestServer") {
-            type = "gameTestServer"
-            systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
-        }
-
-        register("data") {
-            data()
-
-            gameDirectory = project.file("run-data")
-
-            programArguments.addAll(
-                "--mod", ModInfo.mod_id,
-                "--all",
-                "--output", file("src/generated/resources/").absolutePath,
-                "--existing", file("src/main/resources/").absolutePath)
-        }
-
-        configureEach {
-            jvmArgument("-XX:+AllowEnhancedClassRedefinition")
-            systemProperty("forge.logging.markers", "REGISTRIES")
-
-            logLevel = org.slf4j.event.Level.DEBUG
-        }
-    }
-
-    mods {
-        register(ModInfo.mod_id) {
-            sourceSet(sourceSets["main"])
-        }
+tasks.withType<JavaExec>().configureEach {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+        vendor.set(JvmVendorSpec.JETBRAINS)
     }
 }
 
-val localRuntime by configurations.creating
-configurations.runtimeClasspath {
-    extendsFrom(localRuntime)
+var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
+    var replaceProperties = mapOf(
+        "minecraft_version" to mcVersion,
+        "minecraft_version_range" to project.property("minecraft_version_range"),
+        "minecraft_resource_format" to project.property("minecraft_resource_format"),
+        "forge_version" to forgeLoaderVersion,
+        "forge_version_range" to project.property("forge_version_range"),
+        "loader_version_range" to project.property("loader_version_range"),
+        "mod_id" to ModInfo.mod_id,
+        "mod_name" to ModInfo.mod_name,
+        "mod_license" to ModInfo.mod_license,
+        "mod_version" to modVersion,
+    )
+    expand(replaceProperties)
+    from("../../src/main/templates")
+    if (isForge) {
+        exclude("**/neoforge.mods.toml")
+    } else {
+        exclude("**/mods.toml")
+        exclude("**/pack.mcmeta")
+    }
+    into("build/generated/sources/modMetadata")
+}
+sourceSets["main"].resources.srcDir(generateModMetadata)
+
+sourceSets["main"].resources {
+    srcDir("src/generated/resources")
+
+    exclude("**/*.bbmodel")
+    exclude("**/*.ase", "**/*.aseprite")
+    exclude("src/generated/**/.cache")
+}
+
+if (isForge) {
+    pluginManager.apply(libs.plugins.moddevgradlelegacy.get().pluginId)
+    extensions.configure<LegacyForgeExtension> {
+        version = "$mcVersion-$forgeLoaderVersion"
+
+        parchment {
+            mappingsVersion = property("parchment_mappings_version") as String
+            minecraftVersion = property("parchment_minecraft_version") as String
+        }
+
+        // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
+
+        runs {
+            register("client") {
+                client()
+
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            register("client2") {
+                client()
+
+                gameDirectory = project.file("run2")
+                programArguments.addAll("--username", "Dev2")
+
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            register("server") {
+                server()
+                programArgument("--nogui")
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            configureEach {
+                jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+                systemProperty("forge.logging.markers", "REGISTRIES")
+
+                logLevel = org.slf4j.event.Level.DEBUG
+            }
+        }
+
+        mods {
+            register(ModInfo.mod_id) {
+                sourceSet(sourceSets["main"])
+            }
+        }
+
+        ideSyncTask(generateModMetadata)
+    }
+} else {
+    pluginManager.apply(libs.plugins.moddevgradle.get().pluginId)
+    extensions.configure<NeoForgeExtension> {
+        version = forgeLoaderVersion
+
+        parchment {
+            mappingsVersion = property("parchment_mappings_version") as String
+            minecraftVersion = property("parchment_minecraft_version") as String
+        }
+
+        // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
+
+        runs {
+            register("client") {
+                client()
+
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            register("client2") {
+                client()
+
+                gameDirectory = project.file("run2")
+                programArguments.addAll("--username", "Dev2")
+
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            register("server") {
+                server()
+                programArgument("--nogui")
+                systemProperty("neoforge.enabledGameTestNamespaces", ModInfo.mod_id)
+            }
+
+            configureEach {
+                jvmArgument("-XX:+AllowEnhancedClassRedefinition")
+                systemProperty("forge.logging.markers", "REGISTRIES")
+
+                logLevel = org.slf4j.event.Level.DEBUG
+            }
+        }
+
+        mods {
+            register(ModInfo.mod_id) {
+                sourceSet(sourceSets["main"])
+            }
+        }
+
+        ideSyncTask(generateModMetadata)
+    }
 }
 
 repositories {
@@ -134,48 +224,35 @@ repositories {
             includeGroup("curse.maven")
         }
     }
-    maven {
-        name = "Modrinth"
-        url = uri("https://api.modrinth.com/maven")
-        content {
-            includeGroup("maven.modrinth")
-        }
-    }
+}
+
+fun DependencyHandlerScope.depend(name: String, notation: Any) {
+    add(
+        if (platform == "forge") {
+            "mod${name.uppercaseFirstChar()}"
+        } else name,
+        notation
+    )
+}
+
+fun DependencyHandlerScope.modImplementation(notation: Any) {
+    depend("implementation", notation)
+}
+fun DependencyHandlerScope.modRuntimeOnly(notation: Any) {
+    depend("runtimeOnly", notation)
 }
 
 dependencies {
-    implementation("curse.maven:jaopca-266936:5842919")
+    modImplementation("curse.maven:jaopca-266936:${property("jaopca_version_id")}")
 
-    runtimeOnly("curse.maven:immersive-engineering-231951:6733669")
-    runtimeOnly("curse.maven:mekanism-268560:7904058")
-    runtimeOnly("maven.modrinth:jei:UJRXzDfp")
+    modRuntimeOnly("curse.maven:immersive-engineering-231951:${property("immersiveengineering_version_id")}")
+    modRuntimeOnly("curse.maven:mekanism-268560:${property("mekanism_version_id")}")
+    modRuntimeOnly("curse.maven:jei-238222:${property("jei_version_id")}")
 }
 
-var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
-    var replaceProperties = mapOf(
-        "minecraft_version" to minecraftVersion,
-        "minecraft_version_range" to project.property("minecraft_version_range"),
-        "forge_version" to forgeVersion,
-        "forge_version_range" to project.property("forge_version_range"),
-        "loader_version_range" to project.property("loader_version_range"),
-        "mod_id" to ModInfo.mod_id,
-        "mod_name" to ModInfo.mod_name,
-        "mod_license" to ModInfo.mod_license,
-        "mod_version" to modVersion,
-    )
-    expand(replaceProperties)
-    from("../../src/main/templates")
-    into("build/generated/sources/modMetadata")
-}
-sourceSets["main"].resources.srcDir(generateModMetadata)
-neoForge.ideSyncTask(generateModMetadata)
-
-sourceSets["main"].resources {
-    srcDir("src/generated/resources")
-
-    exclude("**/*.bbmodel")
-    exclude("**/*.ase", "**/*.aseprite")
-    exclude("src/generated/**/.cache")
+val localRuntime by configurations.creating
+configurations.runtimeClasspath {
+    extendsFrom(localRuntime)
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -199,7 +276,11 @@ fun parsePublishType(name: String): ReleaseType {
 
 publishMods {
     displayName = "${ModInfo.mod_name} $modVersion"
-    file = tasks.jar.get().archiveFile
+    if (isForge) {
+        file.set(tasks.named<Jar>("reobfJar").get().archiveFile)
+    } else {
+        file.set(tasks.jar.get().archiveFile)
+    }
     changelog = file("../../changelog.md").readText()
     type = parsePublishType(releaseTypeOverride ?: "STABLE")
     modLoaders.add(platform)
@@ -207,7 +288,7 @@ publishMods {
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_API_KEY").getOrElse("")
         projectId = ModInfo.curseforge_project_id
-        minecraftVersions.add(minecraftVersion)
+        minecraftVersions.add(mcVersion)
         client = true
         server = true
     }
@@ -215,6 +296,6 @@ publishMods {
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN").getOrElse("")
         projectId = ModInfo.modrinth_project_id
-        minecraftVersions.add(minecraftVersion)
+        minecraftVersions.add(mcVersion)
     }
 }
