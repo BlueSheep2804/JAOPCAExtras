@@ -76,13 +76,6 @@ kotlin {
     }
 }
 
-tasks.withType<JavaExec>().configureEach {
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
-        vendor.set(JvmVendorSpec.JETBRAINS)
-    }
-}
-
 var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
     var replaceProperties = mapOf(
         "minecraft_version" to mcVersion,
@@ -223,6 +216,13 @@ if (isForge) {
         }
 
         ideSyncTask(generateModMetadata)
+    }
+}
+
+tasks.withType<JavaExec>().configureEach {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
+        vendor.set(JvmVendorSpec.JETBRAINS)
     }
 }
 
