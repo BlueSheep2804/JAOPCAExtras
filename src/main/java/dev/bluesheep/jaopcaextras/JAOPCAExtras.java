@@ -23,6 +23,6 @@ public class JAOPCAExtras {
     *///?}
 
     public static ResourceLocation rl(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+        return ResourceLocationWrapper.fromNamespaceAndPath(MODID, path);
     }
 }

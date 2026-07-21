@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "jaopcaextras:item/crystal/processor",
+    "layer1": "jaopcaextras:item/crystal/processor_overlay"
+  }
+}

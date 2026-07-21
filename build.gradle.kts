@@ -1,6 +1,7 @@
 import me.modmuss50.mpp.ReleaseType
 import net.neoforged.moddevgradle.dsl.NeoForgeExtension
 import net.neoforged.moddevgradle.legacyforge.dsl.LegacyForgeExtension
+import org.gradle.api.file.DuplicatesStrategy
 import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 
 plugins {
@@ -31,6 +32,7 @@ object ModInfo {
 }
 
 val mcVersion = sc.current.version
+val uses1211OrNewerTextures = sc.current.parsed >= "1.21.1"
 val forgeLoaderVersion = property("forge_version") as String
 val platform = if (sc.current.parsed >= "1.21") {
     "neoforge"
@@ -104,14 +106,22 @@ var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     }
     into("build/generated/sources/modMetadata")
 }
-sourceSets["main"].resources.srcDir(generateModMetadata)
 
 sourceSets["main"].resources {
+    srcDir(generateModMetadata)
     srcDir("src/generated/resources")
+
+    if (uses1211OrNewerTextures) {
+        srcDir(rootProject.file("overlay/1.21.1"))
+    }
 
     exclude("**/*.bbmodel")
     exclude("**/*.ase", "**/*.aseprite")
     exclude("src/generated/**/.cache")
+}
+
+tasks.named<ProcessResources>("processResources") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 if (isForge) {
@@ -224,6 +234,13 @@ repositories {
             includeGroup("curse.maven")
         }
     }
+    maven {
+        name = "ModMaven"
+        url = uri("https://modmaven.dev")
+        content {
+            includeGroup("appeng")
+        }
+    }
 }
 
 fun DependencyHandlerScope.depend(name: String, notation: Any) {
@@ -245,8 +262,15 @@ fun DependencyHandlerScope.modRuntimeOnly(notation: Any) {
 dependencies {
     modImplementation("curse.maven:jaopca-266936:${property("jaopca_version_id")}")
 
+    if (isForge) {
+        modImplementation("appeng:appliedenergistics2-forge:${property("ae2_version")}")
+    } else {
+        modImplementation("org.appliedenergistics:appliedenergistics2:${property("ae2_version")}")
+    }
+
     modRuntimeOnly("curse.maven:immersive-engineering-231951:${property("immersiveengineering_version_id")}")
     modRuntimeOnly("curse.maven:mekanism-268560:${property("mekanism_version_id")}")
+    if (sc.current.version == "1.21.1") modRuntimeOnly("curse.maven:emi-580555:8081408")
     modRuntimeOnly("curse.maven:jei-238222:${property("jei_version_id")}")
 }
 
