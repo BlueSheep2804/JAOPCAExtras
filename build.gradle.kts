@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.moddevgradle) apply false
     alias(libs.plugins.moddevgradlelegacy) apply false
     alias(libs.plugins.modpublishplugin)
+    alias(libs.plugins.fletchingtable)
     kotlin("jvm") version "2.0.0"
 }
 
@@ -82,6 +83,17 @@ kotlin {
     }
 }
 
+fletchingTable {
+    j52j.register("main") {
+        val pattern = "data/${ModInfo.mod_id}/recipes/**/*.json5"
+        if (useOverlay1_21_1) {
+            extension("json", "$pattern -> ../recipe")
+        } else {
+            extension("json", pattern)
+        }
+    }
+}
+
 var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata") {
     var replaceProperties = mapOf(
         "minecraft_version" to mcVersion,
@@ -124,8 +136,10 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 val syncIdeaTexturesOverlay = if (useOverlay1_21_1) {
-    tasks.register<Copy>("syncIdeaTexturesOverlay") {
-        from(overlay1_21_1)
+    tasks.register<Sync>("syncIdeaTexturesOverlay") {
+        val processResources = tasks.named<ProcessResources>("processResources")
+        dependsOn(processResources)
+        from(processResources.map { it.destinationDir })
         into(layout.projectDirectory.dir("out/production/resources"))
     }
 } else null

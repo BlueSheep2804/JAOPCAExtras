@@ -1,8 +1,10 @@
 [versions]
 moddevgradle-version = "2.0.141"
 modpublishplugin-version = "2.1.1"
+fletchingtable-version = "0.1.0-alpha.22"
 
 [plugins]
 moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle-version" }
 moddevgradlelegacy = { id = "net.neoforged.moddev.legacyforge", version.ref = "moddevgradle-version" }
 modpublishplugin = { id = "me.modmuss50.mod-publish-plugin", version.ref = "modpublishplugin-version" }
+fletchingtable = { id = "dev.kikugie.fletching-table.neoforge", version.ref = "fletchingtable-version" }

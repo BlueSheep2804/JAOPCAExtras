@@ -1,6 +1,10 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        maven {
+            name = "KikuGie Snapshots"
+            url = uri("https://maven.kikugie.dev/snapshots")
+        }
     }
 }
 

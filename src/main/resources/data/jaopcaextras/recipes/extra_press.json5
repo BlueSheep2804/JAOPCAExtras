@@ -1,0 +1,19 @@
+{
+  "type": "ae2:inscriber",
+  "mode": "press",
+  "result": {
+    //~ if >= 1.21 '"item"' -> '"id"'
+    "id": "jaopcaextras:extra_press"
+  },
+  "ingredients": {
+    "middle": {
+      "item": "minecraft:iron_block"
+    },
+    "top": {
+      "item": "ae2:fluix_pearl"
+    },
+    "bottom": {
+      "item": "ae2:printed_silicon"
+    }
+  }
+}
