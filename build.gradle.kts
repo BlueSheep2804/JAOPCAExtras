@@ -15,7 +15,9 @@ plugins {
 
 stonecutter {
     replacements.string(current.parsed >= "1.21") {
-        replace("net.minecraftforge", "net.neoforged")
+        replace("net.minecraftforge", "net.neoforged.neoforge")
+        replace("net.minecraftforge.fml", "net.neoforged.fml")
+        replace("net.minecraftforge.eventbus", "net.neoforged.bus")
     }
 }
 
@@ -32,7 +34,6 @@ object ModInfo {
 }
 
 val mcVersion = sc.current.version
-val uses1211OrNewerTextures = sc.current.parsed >= "1.21.1"
 val forgeLoaderVersion = property("forge_version") as String
 val platform = if (sc.current.parsed >= "1.21") {
     "neoforge"
@@ -42,6 +43,11 @@ val projectJavaVersion = when {
     sc.current.parsed >= "1.20.5" -> 21
     else -> 17
 }
+
+@Suppress("PropertyName")
+val useOverlay1_21_1 = sc.current.parsed >= "1.21.1"
+@Suppress("PropertyName")
+val overlay1_21_1 = rootProject.file("overlay/1.21.1")
 
 fun getProperty(name: String): String? {
     return if (project.hasProperty(name)) {
@@ -104,8 +110,8 @@ sourceSets["main"].resources {
     srcDir(generateModMetadata)
     srcDir("src/generated/resources")
 
-    if (uses1211OrNewerTextures) {
-        srcDir(rootProject.file("overlay/1.21.1"))
+    if (useOverlay1_21_1) {
+        srcDir(overlay1_21_1)
     }
 
     exclude("**/*.bbmodel")
@@ -116,6 +122,13 @@ sourceSets["main"].resources {
 tasks.named<ProcessResources>("processResources") {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
+
+val syncIdeaTexturesOverlay = if (useOverlay1_21_1) {
+    tasks.register<Copy>("syncIdeaTexturesOverlay") {
+        from(overlay1_21_1)
+        into(layout.projectDirectory.dir("out/production/resources"))
+    }
+} else null
 
 if (isForge) {
     pluginManager.apply(libs.plugins.moddevgradlelegacy.get().pluginId)
@@ -156,6 +169,8 @@ if (isForge) {
                 systemProperty("forge.logging.markers", "REGISTRIES")
 
                 logLevel = org.slf4j.event.Level.DEBUG
+
+                syncIdeaTexturesOverlay?.let(::taskBefore)
             }
         }
 
@@ -206,6 +221,8 @@ if (isForge) {
                 systemProperty("forge.logging.markers", "REGISTRIES")
 
                 logLevel = org.slf4j.event.Level.DEBUG
+
+                syncIdeaTexturesOverlay?.let(::taskBefore)
             }
         }
 

@@ -2,11 +2,11 @@ package dev.bluesheep.jaopcaextras.modules;
 
 import appeng.recipes.handlers.InscriberProcessType;
 import dev.bluesheep.jaopcaextras.JAOPCAExtras;
+import dev.bluesheep.jaopcaextras.JAOPCAExtrasItems;
 import dev.bluesheep.jaopcaextras.ResourceLocationWrapper;
 import dev.bluesheep.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
@@ -22,7 +22,7 @@ import thelm.jaopca.api.modules.JAOPCAModule;
 import java.util.*;
 
 //? if forge {
-/*import net.neoforged.registries.ForgeRegistries;
+/*import net.neoforged.neoforge.registries.ForgeRegistries;
  *///?} else {
 import net.minecraft.core.registries.BuiltInRegistries;
 //?}
@@ -54,7 +54,7 @@ public class AE2Module implements IModule {
     @Override
     public void onCommonSetup(IModuleData moduleData, FMLCommonSetupEvent event) {
         IMiscHelper miscHelper = api.miscHelper();
-        Item press = Items.AMETHYST_SHARD;  // WIP
+        Item press = JAOPCAExtrasItems.EXTRA_PRESS.get();
 
         for (IMaterial material : circuitForm.getMaterials()) {
             String name = material.getName();

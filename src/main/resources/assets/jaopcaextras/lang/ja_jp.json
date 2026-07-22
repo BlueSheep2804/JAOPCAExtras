@@ -3,5 +3,6 @@
   "item.jaopca.rods": "%sの棒",
   "item.jaopca.gears": "%sの歯車",
   "item.jaopca.circuits": "%s回路",
-  "item.jaopca.processors": "%sプロセッサ"
+  "item.jaopca.processors": "%sプロセッサ",
+  "item.jaopcaextras.extra_press": "追加回路の金型"
 }
