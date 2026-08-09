@@ -5,6 +5,7 @@ import dev.bluesheep.jaopcaextras.JAOPCAExtras;
 import dev.bluesheep.jaopcaextras.JAOPCAExtrasItems;
 import dev.bluesheep.jaopcaextras.ResourceLocationWrapper;
 import dev.bluesheep.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
+import dev.bluesheep.jaopcaextras.recipes.extendedae.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -26,6 +27,9 @@ import java.util.*;
  *///?} else {
 import net.minecraft.core.registries.BuiltInRegistries;
 //?}
+
+//? if < 1.21
+//import dev.bluesheep.jaopcaextras.recipes.AdvancedAEReactionRecipeSerializer;
 
 @JAOPCAModule(modDependencies = "ae2")
 public class AE2Module implements IModule {
@@ -71,10 +75,24 @@ public class AE2Module implements IModule {
                                 circuitInfo
                         )
                 );
+
+                ResourceLocation materialBlockLocation = miscHelper.getTagLocation("storage_blocks", name);
+
+                ResourceLocation circuitCutterRecipeLocation = JAOPCAExtras.rl("circuit_cutter.circuit." + material.getName());
+                api.registerRecipe(
+                        circuitCutterRecipeLocation,
+                        new CircuitCutterRecipeSerializer(
+                                circuitCutterRecipeLocation,
+                                circuitInfo,
+                                material.isSmallStorageBlock() ? 4 : 9,
+                                materialBlockLocation
+                        )
+                );
             }
         }
 
         ResourceLocation redstone = miscHelper.getTagLocation("dusts", "redstone");
+        Item printedSilicon = getItem(ResourceLocationWrapper.fromNamespaceAndPath("ae2", "printed_silicon"));
 
         for (IMaterial material : processorForm.getMaterials()) {
             String name = material.getName();
@@ -87,10 +105,28 @@ public class AE2Module implements IModule {
                                 InscriberProcessType.PRESS,
                                 redstone,
                                 circuitLocation,
-                                getItem(ResourceLocationWrapper.fromNamespaceAndPath("ae2", "printed_silicon")),
+                                printedSilicon,
                                 processorInfo
                         )
                 );
+
+                //? if >= 1.21.1 {
+                api.registerRecipe(
+                        JAOPCAExtras.rl("crystal_assembler.processor." + material.getName()),
+                        new CrystalAssemblerRecipeSerializer(
+                                processorInfo, 4,
+                                List.of(circuitLocation, printedSilicon, redstone), 4
+                        )
+                );
+                //?} else {
+                /*api.registerRecipe(
+                        JAOPCAExtras.rl("reaction_chamber.processor." + material.getName()),
+                        new AdvancedAEReactionRecipeSerializer(
+                                processorInfo, 4,
+                                List.of(circuitLocation, printedSilicon, redstone), 4
+                        )
+                );
+                *///?}
             }
         }
     }

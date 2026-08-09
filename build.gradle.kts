@@ -272,6 +272,13 @@ repositories {
             includeGroup("appeng")
         }
     }
+    maven {
+        name = "GeckoLib"
+        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
 }
 
 fun DependencyHandlerScope.depend(name: String, notation: Any) {
@@ -297,6 +304,21 @@ dependencies {
         modImplementation("appeng:appliedenergistics2-forge:${property("ae2_version")}")
     } else {
         modImplementation("org.appliedenergistics:appliedenergistics2:${property("ae2_version")}")
+    }
+
+    val version = sc.current.version
+    when (version) {
+        "1.21.1" -> {
+            modImplementation("curse.maven:glodium-957920:5821676")
+            modImplementation("curse.maven:ex-pattern-provider-892005:6394321")
+        }
+        "1.20.1" -> {
+            modImplementation("curse.maven:glodium-957920:5226922")
+            modImplementation("curse.maven:ex-pattern-provider-892005:6010405")
+            modImplementation("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.4")
+            modImplementation("curse.maven:advancedae-1084104:6205290")
+        }
+        else -> {}
     }
 
     modRuntimeOnly("curse.maven:immersive-engineering-231951:${property("immersiveengineering_version_id")}")
