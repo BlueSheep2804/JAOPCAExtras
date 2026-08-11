@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.moddevgradlelegacy) apply false
     alias(libs.plugins.modpublishplugin)
     alias(libs.plugins.fletchingtable)
-    kotlin("jvm") version "2.0.0"
 }
 
 stonecutter {
@@ -19,6 +18,17 @@ stonecutter {
         replace("net.minecraftforge", "net.neoforged.neoforge")
         replace("net.minecraftforge.fml", "net.neoforged.fml")
         replace("net.minecraftforge.eventbus", "net.neoforged.bus")
+    }
+
+    replacements.string(current.parsed >= "1.21.11") {
+        replace("ResourceLocation", "Identifier")
+        replace("IdentifierWrapper", "IdentifierWrapper")
+        replace("ItemStack", "ItemStackTemplate")
+    }
+
+    swaps["ae2_recipe_ingredient"] = when {
+        current.parsed >= "26.1" -> "\"$1\": \"$2\"$3"
+        else -> "\"$1\": { \"item\": \"$2\" }$3"
     }
 }
 
@@ -41,6 +51,7 @@ val platform = if (sc.current.parsed >= "1.21") {
 } else "forge"
 val isForge = platform == "forge"
 val projectJavaVersion = when {
+    sc.current.parsed >= "26.1" -> 25
     sc.current.parsed >= "1.20.5" -> 21
     else -> 17
 }
@@ -49,6 +60,11 @@ val projectJavaVersion = when {
 val useOverlay1_21_1 = sc.current.parsed >= "1.21.1"
 @Suppress("PropertyName")
 val overlay1_21_1 = rootProject.file("overlay/1.21.1")
+
+@Suppress("PropertyName")
+val useOverlay26_1_2 = sc.current.parsed >= "26.1.2"
+@Suppress("PropertyName")
+val overlay26_1_2 = rootProject.file("overlay/26.1.2")
 
 fun getProperty(name: String): String? {
     return if (project.hasProperty(name)) {
@@ -74,13 +90,6 @@ base {
 java.toolchain {
     languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
     vendor.set(JvmVendorSpec.JETBRAINS)
-}
-
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(projectJavaVersion))
-        vendor.set(JvmVendorSpec.JETBRAINS)
-    }
 }
 
 fletchingTable {
@@ -125,6 +134,9 @@ sourceSets["main"].resources {
     if (useOverlay1_21_1) {
         srcDir(overlay1_21_1)
     }
+    if (useOverlay26_1_2) {
+        srcDir(overlay26_1_2)
+    }
 
     exclude("**/*.bbmodel")
     exclude("**/*.ase", "**/*.aseprite")
@@ -148,11 +160,6 @@ if (isForge) {
     pluginManager.apply(libs.plugins.moddevgradlelegacy.get().pluginId)
     extensions.configure<LegacyForgeExtension> {
         version = "$mcVersion-$forgeLoaderVersion"
-
-        parchment {
-            mappingsVersion = property("parchment_mappings_version") as String
-            minecraftVersion = property("parchment_minecraft_version") as String
-        }
 
         // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
 
@@ -200,11 +207,6 @@ if (isForge) {
     pluginManager.apply(libs.plugins.moddevgradle.get().pluginId)
     extensions.configure<NeoForgeExtension> {
         version = forgeLoaderVersion
-
-        parchment {
-            mappingsVersion = property("parchment_mappings_version") as String
-            minecraftVersion = property("parchment_minecraft_version") as String
-        }
 
         // accessTransformers = project.files("src/main/resources/META-INF/accesstransformer.cfg")
 
@@ -297,6 +299,15 @@ fun DependencyHandlerScope.modRuntimeOnly(notation: Any) {
     depend("runtimeOnly", notation)
 }
 
+fun DependencyHandlerScope.modImplementationIfAvailable(notation: String, version: String?) {
+    if (version == null) return
+    modImplementation("$notation:$version")
+}
+fun DependencyHandlerScope.modRuntimeOnlyIfAvailable(notation: String, version: String?) {
+    if (version == null) return
+    modRuntimeOnly("$notation:$version")
+}
+
 dependencies {
     modImplementation("curse.maven:jaopca-266936:${property("jaopca_version_id")}")
 
@@ -306,25 +317,22 @@ dependencies {
         modImplementation("org.appliedenergistics:appliedenergistics2:${property("ae2_version")}")
     }
 
+    modImplementationIfAvailable("curse.maven:glodium-957920", getProperty("glodium_version_id"))
+    modImplementationIfAvailable("curse.maven:ex-pattern-provider-892005", getProperty("extendedae_version_id"))
+
     val version = sc.current.version
     when (version) {
-        "1.21.1" -> {
-            modImplementation("curse.maven:glodium-957920:5821676")
-            modImplementation("curse.maven:ex-pattern-provider-892005:6394321")
-        }
         "1.20.1" -> {
-            modImplementation("curse.maven:glodium-957920:5226922")
-            modImplementation("curse.maven:ex-pattern-provider-892005:6010405")
-            modImplementation("software.bernie.geckolib:geckolib-forge-1.20.1:4.8.4")
             modImplementation("curse.maven:advancedae-1084104:6205290")
         }
         else -> {}
     }
 
-    modRuntimeOnly("curse.maven:immersive-engineering-231951:${property("immersiveengineering_version_id")}")
-    modRuntimeOnly("curse.maven:mekanism-268560:${property("mekanism_version_id")}")
-    if (sc.current.version == "1.21.1") modRuntimeOnly("curse.maven:emi-580555:8081408")
-    modRuntimeOnly("curse.maven:jei-238222:${property("jei_version_id")}")
+    modRuntimeOnlyIfAvailable("curse.maven:immersive-engineering-231951", getProperty("immersiveengineering_version_id"))
+    modRuntimeOnlyIfAvailable("curse.maven:mekanism-268560", getProperty("mekanism_version_id"))
+    modRuntimeOnlyIfAvailable("curse.maven:energized-power-782147", getProperty("energizedpower_version_id"))
+    modRuntimeOnlyIfAvailable("curse.maven:emi-580555", getProperty("emi_version_id"))
+    modRuntimeOnlyIfAvailable("curse.maven:jei-238222", getProperty("jei_version_id"))
 }
 
 val localRuntime by configurations.creating

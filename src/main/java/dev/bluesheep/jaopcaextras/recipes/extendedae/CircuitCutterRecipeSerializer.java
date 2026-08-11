@@ -33,6 +33,8 @@ public record CircuitCutterRecipeSerializer(
                 IngredientStack.of(miscHelper.getIngredient(input), 1)
                 //? if < 1.21
                 //, IngredientStack.of(new FluidStack(Fluids.WATER.getSource(), 100))
+                //? if >= 26.1
+                //, outputCount * 2000L
         ));
     }
 

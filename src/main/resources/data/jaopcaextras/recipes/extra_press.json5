@@ -6,14 +6,11 @@
     "id": "jaopcaextras:extra_press"
   },
   "ingredients": {
-    "middle": {
-      "item": "minecraft:iron_block"
-    },
-    "top": {
-      "item": "ae2:fluix_pearl"
-    },
-    "bottom": {
-      "item": "ae2:printed_silicon"
-    }
+    //$ ae2_recipe_ingredient middle 'minecraft:iron_block' ','
+    "middle": { "item": "minecraft:iron_block" },
+    //$ ae2_recipe_ingredient top 'ae2:fluix_pearl' ','
+    "top": { "item": "ae2:fluix_pearl" },
+    //$ ae2_recipe_ingredient bottom 'ae2:printed_silicon' ''
+    "bottom": { "item": "ae2:printed_silicon" }
   }
 }

@@ -3,11 +3,12 @@ package dev.bluesheep.jaopcaextras.modules;
 import appeng.recipes.handlers.InscriberProcessType;
 import dev.bluesheep.jaopcaextras.JAOPCAExtras;
 import dev.bluesheep.jaopcaextras.JAOPCAExtrasItems;
-import dev.bluesheep.jaopcaextras.ResourceLocationWrapper;
+import dev.bluesheep.jaopcaextras.IdentifierWrapper;
 import dev.bluesheep.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
 import dev.bluesheep.jaopcaextras.recipes.extendedae.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
@@ -92,7 +93,7 @@ public class AE2Module implements IModule {
         }
 
         ResourceLocation redstone = miscHelper.getTagLocation("dusts", "redstone");
-        Item printedSilicon = getItem(ResourceLocationWrapper.fromNamespaceAndPath("ae2", "printed_silicon"));
+        Item printedSilicon = getItem(IdentifierWrapper.fromNamespaceAndPath("ae2", "printed_silicon"));
 
         for (IMaterial material : processorForm.getMaterials()) {
             String name = material.getName();
@@ -133,6 +134,11 @@ public class AE2Module implements IModule {
 
     private Item getItem(ResourceLocation resourceLocation) {
         //~ if neoforge 'ForgeRegistries.ITEMS.getValue' -> 'BuiltInRegistries.ITEM.get'
-        return BuiltInRegistries.ITEM.get(resourceLocation);
+        var item = BuiltInRegistries.ITEM.get(resourceLocation);
+        //? if < 26.1 {
+        return item;
+        //?} else {
+        /*return item.get().value();
+        *///?}
     }
 }

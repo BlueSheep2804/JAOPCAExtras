@@ -6,11 +6,9 @@
     "id": "jaopcaextras:extra_press"
   },
   "ingredients": {
-    "middle": {
-      "item": "minecraft:iron_block"
-    },
-    "top": {
-      "item": "jaopcaextras:extra_press"
-    }
+    //$ ae2_recipe_ingredient middle 'minecraft:iron_block' ','
+    "middle": { "item": "minecraft:iron_block" },
+    //$ ae2_recipe_ingredient top 'jaopcaextras:extra_press' ''
+    "top": { "item": "jaopcaextras:extra_press" }
   }
 }

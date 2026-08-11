@@ -27,12 +27,12 @@ public class JAOPCAExtras {
     }
 
     private void addItemsToCreativeTab(BuildCreativeModeTabContentsEvent event) {
-        if (event.getTabKey() == ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocationWrapper.fromNamespaceAndPath("jaopca", "tab"))) {
+        if (event.getTabKey() == ResourceKey.create(Registries.CREATIVE_MODE_TAB, IdentifierWrapper.fromNamespaceAndPath("jaopca", "tab"))) {
             event.accept(JAOPCAExtrasItems.EXTRA_PRESS.get());
         }
     }
 
     public static ResourceLocation rl(String path) {
-        return ResourceLocationWrapper.fromNamespaceAndPath(MODID, path);
+        return IdentifierWrapper.fromNamespaceAndPath(MODID, path);
     }
 }

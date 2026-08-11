@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "jaopca:item/crystal/rods",
+    "tints": [
+      {
+        "type": "jaopca:material_form"
+      }
+    ]
+  }
+}

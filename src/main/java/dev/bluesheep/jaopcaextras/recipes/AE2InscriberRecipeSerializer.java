@@ -3,15 +3,19 @@ package dev.bluesheep.jaopcaextras.recipes;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipe;
 import com.google.gson.JsonElement;
-import net.minecraft.world.item.crafting.Ingredient;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.helpers.IMiscHelper;
 import thelm.jaopca.api.recipes.IRecipeSerializer;
 
-//?if < 1.21.1 {
-/*import java.util.Locale;
-import com.google.gson.JsonObject;
+//? if >= 1.21.1 {
+import net.minecraft.world.item.crafting.Ingredient;
+//?} else {
+/*import com.google.gson.JsonObject;
+import appeng.recipes.handlers.InscriberRecipeBuilder;
+import dev.bluesheep.jaopcaextras.JAOPCAExtras;
 *///?}
+//? if >= 26.1.2
+//import java.util.Optional;
 
 public record AE2InscriberRecipeSerializer(
         InscriberProcessType mode,
@@ -29,26 +33,46 @@ public record AE2InscriberRecipeSerializer(
         return miscHelper.serializeRecipe(new InscriberRecipe(
                 miscHelper.getIngredient(inputMiddle),
                 miscHelper.getItemStack(result, 1),
-                miscHelper.getIngredient(inputTop),
-                inputBottom == null ? Ingredient.EMPTY : miscHelper.getIngredient(inputBottom),
+                getOptionalIngredient(inputTop),
+                getOptionalIngredient(inputBottom),
                 mode
         ));
         //?} else {
         /*JsonObject json = new JsonObject();
-        json.addProperty("type", "ae2:inscriber");
-        json.addProperty("mode", this.mode.name().toLowerCase(Locale.ROOT));
-
-        JsonObject ingredientsJson = new JsonObject();
-        ingredientsJson.add("middle", miscHelper.getIngredient(this.inputMiddle).toJson());
-        ingredientsJson.add("top", miscHelper.getIngredient(this.inputTop).toJson());
+        json.addProperty("type", InscriberRecipe.TYPE_ID.toString());
+        var builder = InscriberRecipeBuilder.inscribe(
+                miscHelper.getIngredient(this.inputMiddle),
+                miscHelper.getItemStack(this.result, 1).getItem(),
+                1
+        ).setMode(this.mode);
+        builder.setTop(miscHelper.getIngredient(this.inputTop));
         if (this.mode == InscriberProcessType.PRESS) {
-            ingredientsJson.add("bottom", miscHelper.getIngredient(this.inputBottom).toJson());
+            builder.setBottom(miscHelper.getIngredient(this.inputBottom));
         }
-        json.add("ingredients", ingredientsJson);
-
-        json.add("result", miscHelper.getIngredient(this.result).toJson());
+        builder.save(finishedRecipe -> finishedRecipe.serializeRecipeData(json), JAOPCAExtras.rl("temp"));
 
         return json;
         *///?}
     }
+
+    //? if >= 1.21.1 {
+    private
+    //~ if < 26.1 'Optional<Ingredient>' -> 'Ingredient'
+    Ingredient
+    getOptionalIngredient(Object obj) {
+        if (obj == null) {
+            //? if < 26.1 {
+            return Ingredient.EMPTY;
+            //?} else {
+            /*return Optional.empty();
+            *///?}
+        }
+        Ingredient ingredient = JAOPCAApi.instance().miscHelper().getIngredient(obj);
+        //? if < 26.1 {
+        return ingredient;
+        //?} else {
+        /*return Optional.of(ingredient);
+        *///?}
+    }
+    //?}
 }

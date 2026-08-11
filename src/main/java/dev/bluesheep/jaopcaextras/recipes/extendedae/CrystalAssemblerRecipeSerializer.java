@@ -26,6 +26,8 @@ public record CrystalAssemblerRecipeSerializer(
                 miscHelper.getItemStack(output, outputCount),
                 inputs.stream().map(it -> IngredientStack.of(miscHelper.getIngredient(it), inputCount)).toList(),
                 Optional.empty()
+                //? if >= 26.1
+                //, 2000
         ));
     }
 }

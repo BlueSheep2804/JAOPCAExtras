@@ -2,7 +2,7 @@ package dev.bluesheep.jaopcaextras;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class ResourceLocationWrapper {
+public class IdentifierWrapper {
     public static ResourceLocation fromNamespaceAndPath(String namespace, String path) {
         //? if >= 1.21 {
         return ResourceLocation.fromNamespaceAndPath(namespace, path);
