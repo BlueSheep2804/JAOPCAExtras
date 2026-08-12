@@ -36,5 +36,12 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.${mod_id}]]
+    modId="ae2"
+    type="optional"
+    versionRange="[${ae2_version},)"
+    ordering="NONE"
+    side="BOTH"
+
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"

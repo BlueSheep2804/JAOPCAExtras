@@ -29,3 +29,10 @@ Mod to add various modules to JAOPCA.
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="ae2"
+    mandatory=false
+    versionRange="[${ae2_version},)"
+    ordering="NONE"
+    side="BOTH"

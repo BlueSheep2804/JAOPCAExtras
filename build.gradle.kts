@@ -115,6 +115,7 @@ var generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
         "mod_name" to ModInfo.mod_name,
         "mod_license" to ModInfo.mod_license,
         "mod_version" to modVersion,
+        "ae2_version" to project.property("ae2_version"),
     )
     expand(replaceProperties)
     from("../../src/main/templates")
