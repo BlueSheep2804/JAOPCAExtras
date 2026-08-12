@@ -8,7 +8,7 @@ import dev.bluesheep.jaopcaextras.recipes.AE2InscriberRecipeSerializer;
 import dev.bluesheep.jaopcaextras.recipes.extendedae.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import thelm.jaopca.api.JAOPCAApi;
 import thelm.jaopca.api.forms.IForm;
@@ -77,18 +77,19 @@ public class AE2Module implements IModule {
                         )
                 );
 
-                ResourceLocation materialBlockLocation = miscHelper.getTagLocation("storage_blocks", name);
-
-                ResourceLocation circuitCutterRecipeLocation = JAOPCAExtras.rl("circuit_cutter.circuit." + material.getName());
-                api.registerRecipe(
-                        circuitCutterRecipeLocation,
-                        new CircuitCutterRecipeSerializer(
-                                circuitCutterRecipeLocation,
-                                circuitInfo,
-                                material.isSmallStorageBlock() ? 4 : 9,
-                                materialBlockLocation
-                        )
-                );
+                if (ModList.get().isLoaded("extendedae")) {
+                    ResourceLocation materialBlockLocation = miscHelper.getTagLocation("storage_blocks", name);
+                    ResourceLocation circuitCutterRecipeLocation = JAOPCAExtras.rl("circuit_cutter.circuit." + material.getName());
+                    api.registerRecipe(
+                            circuitCutterRecipeLocation,
+                            new CircuitCutterRecipeSerializer(
+                                    circuitCutterRecipeLocation,
+                                    circuitInfo,
+                                    material.isSmallStorageBlock() ? 4 : 9,
+                                    materialBlockLocation
+                            )
+                    );
+                }
             }
         }
 
@@ -112,21 +113,25 @@ public class AE2Module implements IModule {
                 );
 
                 //? if >= 1.21.1 {
-                api.registerRecipe(
-                        JAOPCAExtras.rl("crystal_assembler.processor." + material.getName()),
-                        new CrystalAssemblerRecipeSerializer(
-                                processorInfo, 4,
-                                List.of(circuitLocation, printedSilicon, redstone), 4
-                        )
-                );
+                if (ModList.get().isLoaded("extendedae")) {
+                    api.registerRecipe(
+                            JAOPCAExtras.rl("crystal_assembler.processor." + material.getName()),
+                            new CrystalAssemblerRecipeSerializer(
+                                    processorInfo, 4,
+                                    List.of(circuitLocation, printedSilicon, redstone), 4
+                            )
+                    );
+                }
                 //?} else {
-                /*api.registerRecipe(
-                        JAOPCAExtras.rl("reaction_chamber.processor." + material.getName()),
-                        new AdvancedAEReactionRecipeSerializer(
-                                processorInfo, 4,
-                                List.of(circuitLocation, printedSilicon, redstone), 4
-                        )
-                );
+                /*if (ModList.get().isLoaded("advancedae")) {
+                    api.registerRecipe(
+                            JAOPCAExtras.rl("reaction_chamber.processor." + material.getName()),
+                            new AdvancedAEReactionRecipeSerializer(
+                                    processorInfo, 4,
+                                    List.of(circuitLocation, printedSilicon, redstone), 4
+                            )
+                    );
+                }
                 *///?}
             }
         }
