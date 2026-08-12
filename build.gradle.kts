@@ -37,11 +37,11 @@ object ModInfo {
     const val mod_id = "jaopcaextras"
     const val mod_name = "JAOPCA Extras"
     const val mod_license = "MIT"
-    const val mod_version = "1.0.0"
+    const val mod_version = "5.0.0"
     const val mod_group_id = "dev.bluesheep.jaopcaextras"
 
-    const val curseforge_project_id = ""
-    const val modrinth_project_id = ""
+    const val curseforge_project_id = "679287"
+    const val modrinth_project_id = "lev3YGBh"
 }
 
 val mcVersion = sc.current.version
